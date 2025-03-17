@@ -1,26 +1,35 @@
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../redux/authSlice";
-import { RootState, AppDispatch } from "../redux/store";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { loginUser } from "../services/api";
 
 interface LoginForm {
-  username: string;
+  email: string;
   password: string;
 }
 
 const Login = () => {
   const { register, handleSubmit } = useForm<LoginForm>();
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const onSubmit = (data: LoginForm) => {
-    dispatch(loginUser(data)).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        navigate("/");
-      }
-    });
+  const onSubmit = async (data: LoginForm) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await loginUser(data);
+      console.log("Login Successful:", response.data);
+
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+
+      navigate("/home");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Login failed");
+      console.error("Login Error:", err.response?.data || err);
+    }
+    setLoading(false);
   };
 
   return (
@@ -30,23 +39,23 @@ const Login = () => {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <input
-            type="text"
-            placeholder="Username"
-            {...register("username")}
+            type="email"
+            placeholder="Email"
+            {...register("email")}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Password"
             {...register("password")}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
           />
           <button
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
-            disabled={isLoading}
+            disabled={loading}
           >
-            {isLoading ? "Logging in..." : "Log In"}
+            {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
         <p className="text-center mt-4 text-gray-600">
