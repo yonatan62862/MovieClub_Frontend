@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { registerUser } from "../services/api";
+import { authService } from "../services/AuthService";
+import { useTitle } from "../hooks/useTitle";
 
 interface RegisterForm {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }
 
 const Register = () => {
+  useTitle("Register");
   const { register, handleSubmit } = useForm<RegisterForm>();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
@@ -18,14 +22,10 @@ const Register = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await registerUser(data);
-      console.log("Registration successful", response.data);
-
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
-
-      navigate("/home");
+      await authService.register(data);
+      navigate("/profile");
     } catch (err: any) {
+      console.error(err);
       setError(err.response?.data?.message || "Registration failed");
     }
     setLoading(false);
@@ -34,9 +34,26 @@ const Register = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-400 to-green-600">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Register</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Register
+        </h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+        >
+          <input
+            type="text"
+            placeholder="First Name"
+            {...register("firstName")}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
+          />
+          <input
+            type="text"
+            placeholder="Last Name"
+            {...register("lastName")}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
+          />
           <input
             type="email"
             placeholder="Email"
@@ -59,7 +76,10 @@ const Register = () => {
         </form>
         <p className="text-center mt-4 text-gray-600">
           Already have an account?{" "}
-          <Link to="/" className="text-green-500 font-semibold hover:underline">
+          <Link
+            to="/login"
+            className="text-green-500 font-semibold hover:underline"
+          >
             Log in
           </Link>
         </p>
