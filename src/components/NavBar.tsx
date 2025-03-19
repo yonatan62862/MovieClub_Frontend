@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AppState } from "../redux/state";
 import store from "../redux/store";
 import { logout } from "../redux/authSlice";
+import AppLogo from "../assets/Logo.png";
 
 const NavBar: React.FC = () => {
   const location = useLocation();
@@ -17,15 +18,19 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-blue-600 p-4 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="bg-blue-400 p-2 shadow-md">
+      <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
         <Link
           to={user ? "/" : "/login"}
-          className="text-white text-2xl font-bold"
+          className="text-white text-2xl font-bold flex items-center space-x-2"
         >
-          MovieClub 🎬
+          <img
+            src={AppLogo}
+            alt="App-logo"
+            className="h-16 w-auto sm:h-20 lg:h-24 transition-all duration-300"
+          />
         </Link>
-        <div className="flex space-x-6">
+        <div className="hidden sm:flex space-x-6">
           {user && (
             <>
               <NavItem
@@ -45,19 +50,27 @@ const NavBar: React.FC = () => {
               />
               <button
                 onClick={handleLogout}
-                className="text-white px-4 py-2 hover:text-gray-300 transition"
+                className="text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
               >
                 Logout
               </button>
             </>
           )}
         </div>
+
+        <div className="sm:hidden flex items-center">
+          <button
+            className="text-white p-2"
+            onClick={() => {}}
+          >
+            <i className="fas fa-bars"></i>
+          </button>
+        </div>
       </div>
     </nav>
   );
 };
 
-// Reusable NavItem Component
 const NavItem: React.FC<{ to: string; label: string; active: boolean }> = ({
   to,
   label,
@@ -66,8 +79,8 @@ const NavItem: React.FC<{ to: string; label: string; active: boolean }> = ({
   return (
     <Link
       to={to}
-      className={`text-white px-4 py-2 ${
-        active ? "bg-blue-800 rounded-md" : "hover:text-gray-300"
+      className={`text-white px-4 py-2 rounded-md transition-all duration-300 ${
+        active ? "bg-blue-800" : "hover:bg-blue-700"
       }`}
     >
       {label}
