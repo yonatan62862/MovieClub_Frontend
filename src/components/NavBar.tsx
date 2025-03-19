@@ -23,7 +23,7 @@ const NavBar: React.FC = () => {
           to={user ? "/" : "/login"}
           className="text-white text-2xl font-bold"
         >
-          MovieClub
+          MovieClub 🎬
         </Link>
         <div className="flex space-x-6">
           {user && (
