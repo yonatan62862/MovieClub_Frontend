@@ -1,13 +1,13 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import ProtectedRoute from "./components/ProtectedRoute";
 import AIAssistant from "./pages/AIAssistant";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Page404 from "./pages/Page404";
-import Register from "./pages/Register";
 import Profile from "./pages/UserProfile";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Register from "./pages/Register";
 
 type IRoute = {
   path: string;

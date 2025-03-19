@@ -1,5 +1,5 @@
 export class User {
-  readonly _id?: string;
+  _id?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -13,7 +13,7 @@ export class User {
     email: string,
     password: string,
     _id?: string,
-    refreshTokens?: string[],
+    refreshToken?: string[],
     profilePicture?: string
   ) {
     this.firstName = firstName;
@@ -21,7 +21,7 @@ export class User {
     this._id = _id;
     this.email = email;
     this.password = password;
-    this.refreshTokens = refreshTokens || [];
+    this.refreshTokens = refreshToken || [];
     this.profilePicture = profilePicture;
   }
 }
