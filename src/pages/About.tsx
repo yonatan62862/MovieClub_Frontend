@@ -6,7 +6,7 @@ import yonatanImage from '../assets/Yonatan.png';
 const About = () => {
   return (
     <div className="flex flex-col items-center text-center p-8">
-      <h1 className="text-3xl font-bold mb-4">About Us</h1>
+      <h1 className="text-4xl font-bold mb-4">About Us</h1>
       <br />
       <p className="max-w-2xl mb-6">
         We are three student developers who share a passion for movies. Our goal is to create an engaging
