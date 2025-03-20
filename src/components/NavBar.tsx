@@ -18,11 +18,11 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-blue-400 p-2 shadow-md">
+    <nav className="bg-white p-2 shadow-md">
       <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
         <Link
           to={user ? "/" : "/login"}
-          className="text-white text-2xl font-bold flex items-center space-x-2"
+          className="text-blue-600 text-2xl font-bold flex items-center space-x-2"
         >
           <img
             src={AppLogo}
@@ -30,27 +30,32 @@ const NavBar: React.FC = () => {
             className="h-16 w-auto sm:h-20 lg:h-24 transition-all duration-300"
           />
         </Link>
-        <div className="hidden sm:flex space-x-6">
+        <div className="hidden sm:flex space-x-6 items-center">
           {user && (
             <>
-              <NavItem
+              <OutlineNavItem
                 to="/"
                 label="Home"
                 active={location.pathname === "/"}
               />
-              <NavItem
+              <OutlineNavItem
                 to="/profile"
                 label="Profile"
                 active={location.pathname === "/profile"}
               />
-              <NavItem
+              <OutlineNavItem
                 to="/ai-assistant"
                 label="AI Assistant"
                 active={location.pathname === "/ai-assistant"}
               />
+              <OutlineNavItem
+                to="/about"
+                label="About"
+                active={location.pathname === "/about"}
+              />
               <button
                 onClick={handleLogout}
-                className="text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
+                className="border border-blue-600 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Logout
               </button>
@@ -60,7 +65,7 @@ const NavBar: React.FC = () => {
 
         <div className="sm:hidden flex items-center">
           <button
-            className="text-white p-2"
+            className="text-blue-600 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={() => {}}
           >
             <i className="fas fa-bars"></i>
@@ -71,7 +76,7 @@ const NavBar: React.FC = () => {
   );
 };
 
-const NavItem: React.FC<{ to: string; label: string; active: boolean }> = ({
+const OutlineNavItem: React.FC<{ to: string; label: string; active: boolean }> = ({
   to,
   label,
   active,
@@ -79,9 +84,8 @@ const NavItem: React.FC<{ to: string; label: string; active: boolean }> = ({
   return (
     <Link
       to={to}
-      className={`text-white px-4 py-2 rounded-md transition-all duration-300 ${
-        active ? "bg-blue-800" : "hover:bg-blue-700"
-      }`}
+      className={`border border-blue-600 text-blue-600 px-4 py-2 rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 
+        ${active ? "bg-blue-600 text-white" : "hover:bg-blue-500 hover:text-white"}`}
     >
       {label}
     </Link>

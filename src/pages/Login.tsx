@@ -30,49 +30,81 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-400 to-blue-600">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Sign In
-        </h2>
-
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-        >
-          <input
-            type="email"
-            placeholder="Email"
-            {...register("email")}
-            className="w-full p-3 border border-gray-300 rounded-lg"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            {...register("password")}
-            className="w-full p-3 border border-gray-300 rounded-lg"
-          />
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Log In"}
-          </button>
-        </form>
-
-        <p className="text-center mt-4 text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="text-blue-500 font-semibold hover:underline"
-          >
-            Register Now
-          </Link>
-        </p>
+    <div className="font-sans">
+      <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100">
+        <div className="relative sm:max-w-sm w-full">
+          <div className="card bg-blue-400 shadow-lg w-full h-full rounded-3xl absolute transform -rotate-6"></div>
+          <div className="card bg-red-400 shadow-lg w-full h-full rounded-3xl absolute transform rotate-6"></div>
+          <div className="relative w-full rounded-3xl px-6 py-4 bg-gray-100 shadow-md">
+            <label className="block mt-3 text-sm text-gray-700 text-center font-semibold">
+              Login
+            </label>
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-10">
+              {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+              <div>
+                <input
+                  {...register("email")}
+                  type="email"
+                  placeholder="Email Address"
+                  className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                />
+              </div>
+              <div className="mt-7">
+                <input
+                  {...register("password")}
+                  type="password"
+                  placeholder="Password"
+                  className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                />
+              </div>
+              <div className="mt-7 flex">
+                <label className="inline-flex items-center w-full cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-200"
+                  />
+                  <span className="ml-2 text-sm text-gray-600">Remember me</span>
+                </label>
+                <div className="w-full text-right">
+                  <a className="underline text-sm text-gray-600 hover:text-gray-900" href="#">
+                    Forgot your password?
+                  </a>
+                </div>
+              </div>
+              <div className="mt-7">
+                <button
+                  type="submit"
+                  className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
+                  disabled={loading}
+                >
+                  {loading ? "Logging in..." : "Login"}
+                </button>
+              </div>
+              <div className="flex mt-7 items-center text-center">
+                <hr className="border-gray-300 border-1 w-full rounded-md" />
+                <label className="block font-medium text-sm text-gray-600 w-full">Sign in with</label>
+                <hr className="border-gray-300 border-1 w-full rounded-md" />
+              </div>
+              <div className="flex mt-7 justify-center w-full">
+                <button className="mr-5 bg-blue-500 px-4 py-2 rounded-xl text-white shadow-xl hover:shadow-inner transition duration-500 transform hover:-translate-x hover:scale-105">
+                  Facebook
+                </button>
+                <button className="bg-red-500 px-4 py-2 rounded-xl text-white shadow-xl hover:shadow-inner transition duration-500 transform hover:-translate-x hover:scale-105">
+                  Google
+                </button>
+              </div>
+              <div className="mt-7 flex justify-center items-center">
+                <label className="mr-2">Don't have an account yet?</label>
+                <Link
+                  to="/register"
+                  className="text-blue-500 transition duration-500 transform hover:-translate-x hover:scale-105"
+                >
+                  Sign up
+                </Link>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
