@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Page404 from "./pages/Page404";
 import Profile from "./pages/UserProfile";
 import Register from "./pages/Register";
+import About from "./pages/About";
 
 type IRoute = {
   path: string;
@@ -19,6 +20,7 @@ const App: React.FC = () => {
     { element: <Login />, path: "/login" },
     { element: <Register />, path: "/register" },
     { element: <Page404 />, path: "*" },
+    { element: <About />, path: "/about" }
   ];
 
   return (
