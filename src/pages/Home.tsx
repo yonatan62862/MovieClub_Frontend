@@ -1,12 +1,15 @@
+// pages/Home.tsx
 import React, { useState } from "react";
 import { useTitle } from "../hooks/useTitle";
 import { createPost } from "../services/api";
 import PostList from "../components/PostList";
+import { useFetchPosts } from "../hooks/useFetchPosts";
 
 const Home: React.FC = () => {
   useTitle("Home Page");
 
-  const owner = "67d9c4d24141a845056c9e3b"; 
+  const { posts, refreshPosts } = useFetchPosts();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -16,21 +19,21 @@ const Home: React.FC = () => {
       return;
     }
 
-    console.log("Submitting new post:", { title, content });
-
     try {
       const formData = new FormData();
-      const userId=localStorage.getItem("userId");  
+      const userId = localStorage.getItem("userId");
       formData.append("title", title);
       formData.append("owner", userId || "");
       formData.append("content", content);
 
       await createPost(formData);
-      console.log("Post created successfully");
 
+      // Clear inputs
       setTitle("");
       setContent("");
 
+      // Refresh post list
+      refreshPosts();
     } catch (error) {
       console.error("Error creating post:", error);
     }
@@ -63,11 +66,17 @@ const Home: React.FC = () => {
         ></textarea>
 
         <div className="buttons flex">
-          <button className="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500 ml-auto">
+          <button
+            className="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500 ml-auto"
+            onClick={() => {
+              setTitle("");
+              setContent("");
+            }}
+          >
             Cancel
           </button>
           <button
-            onClick={handleCreatePost} // ✅ Connected function here
+            onClick={handleCreatePost}
             className="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500"
           >
             Post
@@ -75,9 +84,9 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* List of Posts - No props needed */}
+      {/* Posts */}
       <div className="mt-12">
-        <PostList />
+        <PostList posts={posts} />
       </div>
     </div>
   );
