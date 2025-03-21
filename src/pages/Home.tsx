@@ -6,11 +6,10 @@ import PostList from "../components/PostList";
 const Home: React.FC = () => {
   useTitle("Home Page");
 
-  // 🔹 State for title and content input
+  const owner = "67d9c4d24141a845056c9e3b"; 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  // ✅ Function to handle post creation
   const handleCreatePost = async () => {
     if (!title || !content) {
       alert("Title and content are required!");
@@ -21,17 +20,17 @@ const Home: React.FC = () => {
 
     try {
       const formData = new FormData();
+      const userId=localStorage.getItem("userId");  
       formData.append("title", title);
+      formData.append("owner", userId || "");
       formData.append("content", content);
 
       await createPost(formData);
       console.log("Post created successfully");
 
-      // Clear input fields after successful post
       setTitle("");
       setContent("");
 
-      // ❌ No need to manually fetch posts, as `useFetchPosts` in `PostList` handles it
     } catch (error) {
       console.error("Error creating post:", error);
     }
@@ -43,7 +42,6 @@ const Home: React.FC = () => {
         Welcome to MovieClub 🎬
       </h1>
 
-      {/* New Post Section */}
       <div className="heading text-center font-bold text-2xl mb-6 text-gray-800">
         Share Your Movie Experience
       </div>
@@ -64,7 +62,6 @@ const Home: React.FC = () => {
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
 
-        {/* Buttons */}
         <div className="buttons flex">
           <button className="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500 ml-auto">
             Cancel

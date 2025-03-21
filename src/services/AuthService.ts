@@ -60,7 +60,9 @@ class AuthService {
       credentials
     );
 
+    console.log(response.data);
     const { accessToken, user } = response.data;
+    localStorage.setItem("userId", response.data._id);
     store.dispatch(login(user));
     sessionStorage.setItem("token", accessToken);
   }

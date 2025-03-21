@@ -36,7 +36,7 @@ const App: React.FC = () => {
         ))}
         <Route element={<ProtectedRoute />}>
           <Route
-            path="/"
+            path="/Home"
             element={<Home />}
           />
           <Route

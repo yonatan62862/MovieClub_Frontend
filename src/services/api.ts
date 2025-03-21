@@ -49,7 +49,9 @@ export const getPosts = async (page = 1, limit = 10) => {
 export const createPost = async (postData: FormData) => {
   const response = await api.post("/posts", postData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
+      "Authorization" : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q5YzRkMjQxNDFhODQ1MDU2YzllM2IiLCJyYW5kb20iOiIwLjU2MjgzMjEzMTgwNzc5NTEiLCJpYXQiOjE3NDI1NDkzNzcsImV4cCI6MTc0MjYzNTc3N30.Ah9pLkMNMII9q-FRYSoyTKTIM--g12cpXbWv8KeB7k8"
+
     },
   });
   return response.data;
