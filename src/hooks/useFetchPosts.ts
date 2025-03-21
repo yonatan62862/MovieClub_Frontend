@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// hooks/useFetchPosts.ts
+import { useEffect, useState, useCallback } from "react";
 import { User } from "../models/User";
 import axios from "axios";
 import { appConfig } from "../utils/AppConfig";
@@ -16,18 +17,18 @@ export interface Post {
 export const useFetchPosts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(appConfig.POSTS_URL);
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchPosts();
+  const fetchPosts = useCallback(async () => {
+    try {
+      const response = await axios.get(appConfig.POSTS_URL);
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
   }, []);
 
-  return { posts };
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+
+  return { posts, refreshPosts: fetchPosts };
 };
