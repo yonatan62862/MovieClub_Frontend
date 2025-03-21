@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../services/AuthService";
 import { useTitle } from "../hooks/useTitle";
+import { GoogleLogin } from '@react-oauth/google';
+
 
 interface LoginForm {
   email: string;
@@ -89,9 +91,14 @@ const Login: React.FC = () => {
                 <button className="mr-5 bg-blue-500 px-4 py-2 rounded-xl text-white shadow-xl hover:shadow-inner transition duration-500 transform hover:-translate-x hover:scale-105">
                   Facebook
                 </button>
-                <button className="bg-red-500 px-4 py-2 rounded-xl text-white shadow-xl hover:shadow-inner transition duration-500 transform hover:-translate-x hover:scale-105">
-                  Google
-                </button>
+                <GoogleLogin
+                onSuccess={() => {
+                   window.location.href = "http://localhost:3000/api/auth/google";
+                    }}
+                    onError={() => {
+                       console.log('Google login failed');
+                       }}
+                       />
               </div>
               <div className="mt-7 flex justify-center items-center">
                 <label className="mr-2">Don't have an account yet?</label>

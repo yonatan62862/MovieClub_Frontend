@@ -1,21 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
-import { AppState } from "../redux/state";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const ProtectedRoute: React.FC = () => {
-  const { isAutenticated } = useSelector((appState: AppState) => appState.auth);
+  const location = useLocation();
 
-  if (!isAutenticated) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
+  const isLoggedIn = localStorage.getItem("accessToken") !== null;
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <Outlet />;
+  return <Outlet />; 
 };
 
 export default ProtectedRoute;

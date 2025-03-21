@@ -3,7 +3,7 @@ export class User {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   refreshTokens?: string[];
   profilePicture?: string;
 
@@ -11,7 +11,7 @@ export class User {
     firstName: string,
     lastName: string,
     email: string,
-    password: string,
+    password?: string,
     _id?: string,
     refreshToken?: string[],
     profilePicture?: string

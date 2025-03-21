@@ -9,18 +9,15 @@ import Page404 from "./pages/Page404";
 import Profile from "./pages/UserProfile";
 import Register from "./pages/Register";
 import About from "./pages/About";
-
-type IRoute = {
-  path: string;
-  element: React.JSX.Element;
-};
+import GoogleAuth from "./pages/GoogleAuth";
 
 const App: React.FC = () => {
-  const ROUTES: IRoute[] = [
+  const ROUTES = [
     { element: <Login />, path: "/login" },
     { element: <Register />, path: "/register" },
-    { element: <Page404 />, path: "*" },
-    { element: <About />, path: "/about" }
+    { element: <GoogleAuth />, path: "/google-auth" },
+    { element: <About />, path: "/about" },
+    { element: <Page404 />, path: "*" }
   ];
 
   return (
@@ -28,25 +25,12 @@ const App: React.FC = () => {
       <NavBar />
       <Routes>
         {ROUTES.map(({ element, path }) => (
-          <Route
-            key={path}
-            path={path}
-            element={element}
-          />
+          <Route key={path} path={path} element={element} />
         ))}
         <Route element={<ProtectedRoute />}>
-          <Route
-            path="/Home"
-            element={<Home />}
-          />
-          <Route
-            path="/ai-assistant"
-            element={<AIAssistant />}
-          />
-          <Route
-            path="/profile"
-            element={<Profile />}
-          />
+          <Route path="/Home" element={<Home />} />
+          <Route path="/ai-assistant" element={<AIAssistant />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </>
