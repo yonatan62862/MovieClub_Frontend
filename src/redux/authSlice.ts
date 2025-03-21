@@ -9,9 +9,12 @@ export interface UserState {
 
 const initialState: UserState = {
   user: null,
-  isAutenticated: sessionStorage.getItem("token") ? true : false,
+  isAutenticated:
+    sessionStorage.getItem("token") !== null ||
+    localStorage.getItem("accessToken") !== null,
   isLoading: false,
 };
+
 
 const authSlice = createSlice({
   name: "auth",
