@@ -34,7 +34,7 @@ const NavBar: React.FC = () => {
           {user && (
             <>
               <OutlineNavItem
-                to="/"
+                to="/Home"
                 label="Home"
                 active={location.pathname === "/"}
               />
