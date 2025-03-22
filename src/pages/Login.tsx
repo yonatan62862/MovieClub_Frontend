@@ -90,7 +90,7 @@ const Login: React.FC = () => {
           <Box
             component="img"
             src="/Logo.png"
-            alt="Wellness Hub Logo"
+            alt="Movie Club Logo"
             sx={{ width: 180, height: "auto", mx: "auto", mb: 2 }}
           />
 
