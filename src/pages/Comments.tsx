@@ -12,6 +12,7 @@ import {
   Box,
   Grid,
   IconButton,
+  Paper,
 } from "@mui/material";
 import {
   Send,
@@ -47,7 +48,7 @@ const Comments: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setUserId(data._id); // ✅ Store logged-in user ID
+      setUserId(data._id);
     };
 
     fetchUser();
@@ -110,71 +111,98 @@ const Comments: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      {/* Back Button */}
-      <IconButton
-        onClick={() => navigate("/forum")}
-        sx={{ mt: 2, color: "#00796B" }}
-      >
-        <ArrowBack />
-      </IconButton>
-
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        sx={{ mt: 2, textAlign: "center", color: "#00796B" }}
-      >
-        Comments
-      </Typography>
-
-      {/* Add Comment Section */}
-      <Card
-        sx={{
-          p: 3,
-          mt: 3,
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          borderRadius: "10px",
+    <Box
+      sx={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.88), rgba(0,0,0,0.88)), url('/backround.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        color: "#fff",
+        minHeight: "100vh",
+        py: 4,
+      }}
+    >
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @font-face {
+              font-family: 'CustomMovieFont';
+              src: url('/fonts/font.ttf') format('truetype');
+              font-weight: normal;
+              font-style: normal;
+            }
+          `,
         }}
-      >
-        <TextField
-          fullWidth
-          label="Write a comment..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          variant="outlined"
-          sx={{
-            mb: 2,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "8px",
-              backgroundColor: "#F7F8FA",
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          startIcon={<Send />}
-          sx={{
-            bgcolor: "#00796B",
-            "&:hover": { bgcolor: "#005951" },
-          }}
-          onClick={handleAddComment}
-        >
-          Add Comment
-        </Button>
-      </Card>
+      />
 
-      {/* Display Comments */}
-      <Grid container spacing={2} sx={{ mt: 3 }}>
-        {comments.map((comment) => (
-          <Grid item xs={12} key={comment._id}>
-            <Card
-              sx={{
-                p: 2,
+      <Container maxWidth="md">
+        <IconButton onClick={() => navigate("/forum")} sx={{ color: "#F44336" }}>
+          <ArrowBack />
+        </IconButton>
+
+        <Typography
+          variant="h3"
+          fontWeight="bold"
+          textAlign="center"
+          sx={{
+            color: "#F44336",
+            mb: 4,
+            fontFamily: "CustomMovieFont, sans-serif",
+          }}
+        >
+          🎬 Comments
+        </Typography>
+
+        <Card
+          sx={{
+            p: 3,
+            mb: 4,
+            backgroundColor: "rgba(44, 44, 44, 0.95)",
+            borderRadius: "16px",
+          }}
+        >
+          <TextField
+            fullWidth
+            multiline
+            rows={2}
+            placeholder="Leave a comment.."
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            variant="outlined"
+            sx={{
+              mb: 2,
+              input: { color: "#fff" },
+              "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
-                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <CardContent>
+                backgroundColor: "#1e1e1e",
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            startIcon={<Send />}
+            onClick={handleAddComment}
+            sx={{
+              bgcolor: "#F44336",
+              "&:hover": { bgcolor: "#c62828" },
+              color: "#fff",
+            }}
+          >
+            Add Comment
+          </Button>
+        </Card>
+
+        <Grid container spacing={2}>
+          {comments.map((comment) => (
+            <Grid item xs={12} key={comment._id}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  backgroundColor: "#1e1e1e",
+                  borderRadius: "16px",
+                }}
+              >
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                   <Avatar
                     src={`http://localhost:4000${comment.user.profileImage}`}
@@ -183,7 +211,7 @@ const Comments: React.FC = () => {
                   <Typography
                     variant="subtitle1"
                     fontWeight="bold"
-                    color="#00796B"
+                    sx={{ color: "#F44336" }}
                   >
                     {comment.user.username}
                   </Typography>
@@ -197,11 +225,13 @@ const Comments: React.FC = () => {
                       rows={2}
                       value={editedText}
                       onChange={(e) => setEditedText(e.target.value)}
+                      variant="outlined"
                       sx={{
-                        mb: 1,
+                        mb: 2,
+                        input: { color: "#fff" },
                         "& .MuiOutlinedInput-root": {
-                          borderRadius: "8px",
-                          backgroundColor: "#F7F8FA",
+                          borderRadius: "10px",
+                          backgroundColor: "#2c2c2c",
                         },
                       }}
                     />
@@ -221,39 +251,32 @@ const Comments: React.FC = () => {
                     </Box>
                   </>
                 ) : (
-                  <Typography>{comment.text}</Typography>
+                  <Typography sx={{ color: "#eee" }}>{comment.text}</Typography>
                 )}
 
-                {/* Show Edit/Delete only for the comment owner */}
-                {userId === comment.user.username &&
+                {userId === comment.user._id &&
                   editingCommentId !== comment._id && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        mt: 1,
-                      }}
-                    >
+                    <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
                       <IconButton
-                        color="secondary"
+                        sx={{ color: "#ccc" }}
                         onClick={() => handleEditComment(comment)}
                       >
                         <Edit />
                       </IconButton>
                       <IconButton
-                        color="error"
+                        sx={{ color: "#F44336" }}
                         onClick={() => handleDeleteComment(comment._id)}
                       >
                         <Delete />
                       </IconButton>
                     </Box>
                   )}
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

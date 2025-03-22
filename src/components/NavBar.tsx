@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
                 component="img"
                 src="/Logo.png"
                 alt="Movie Club Logo"
-                sx={{ height: 80, width: "auto", mr: 1 }}
+                sx={{ height: 100, width: "auto", mr: 1 }}
               />
               <Typography
                 variant="h6"
@@ -64,7 +64,6 @@ const Navbar: React.FC = () => {
                   fontFamily: "CustomMovieFont, sans-serif",
                 }}
               >
-                Movie Club
               </Typography>
             </Box>
 
@@ -102,7 +101,7 @@ const Navbar: React.FC = () => {
                 sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
                 onClick={() => navigate("/profile")}
               >
-              My Profile
+              MyProfile
               </Button>
               <Button
                 variant="contained"

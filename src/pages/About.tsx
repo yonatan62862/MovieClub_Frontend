@@ -23,7 +23,6 @@ const About: React.FC = () => {
         px: 2,
       }}
     >
-      {/* 🔤 Load custom font */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -43,7 +42,7 @@ const About: React.FC = () => {
           fontWeight="bold"
           sx={{ mb: 4, color: "#F44336", fontFamily: "CustomMovieFont, sans-serif" }}
         >
-          🎥 About Movie Club
+          About Movie Club 🎥 
         </Typography>
 
         <Card

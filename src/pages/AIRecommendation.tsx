@@ -47,7 +47,6 @@ const AIRecommendation: React.FC = () => {
         py: 4,
       }}
     >
-      {/* Inject font face dynamically */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -71,7 +70,7 @@ const AIRecommendation: React.FC = () => {
           fontFamily: "CustomMovieFont, sans-serif",
         }}
       >
-        🎥 AI Movie Recommendations
+         AI Movie Picks 🎥
       </Typography>
 
       <Container maxWidth="md">
