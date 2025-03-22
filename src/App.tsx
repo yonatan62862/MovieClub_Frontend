@@ -13,7 +13,7 @@ import Profile from "./pages/Profile";
 import Forum from "./pages/Forum";
 import AIRecommendation from "./pages/AIRecommendation";
 import Comments from "./pages/Comments";
-import Navbar from "./components/NavBar";
+import Navbar from "./components/Navbar";
 import About from "./pages/About";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {

@@ -75,7 +75,7 @@ const Dashboard: React.FC = () => {
                 mb: 2,
               }}
             >
-              🎬 Movie Club
+               Movie Club 🎬
             </Typography>
             <Typography
               variant="h6"
