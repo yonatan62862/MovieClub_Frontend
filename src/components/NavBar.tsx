@@ -1,95 +1,129 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AppState } from "../redux/state";
-import store from "../redux/store";
-import { logout } from "../redux/authSlice";
-import AppLogo from "../assets/Logo.png";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Container,
+  Box,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const NavBar: React.FC = () => {
-  const location = useLocation();
-  const { user } = useSelector((appState: AppState) => appState.auth);
+const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     navigate("/login");
-    store.dispatch(logout());
   };
 
   return (
-    <nav className="bg-white p-2 shadow-md">
-      <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
-        <Link
-          to={user ? "/" : "/login"}
-          className="text-blue-600 text-2xl font-bold flex items-center space-x-2"
-        >
-          <img
-            src={AppLogo}
-            alt="App-logo"
-            className="h-16 w-auto sm:h-20 lg:h-24 transition-all duration-300"
-          />
-        </Link>
-        <div className="hidden sm:flex space-x-6 items-center">
-          {user && (
-            <>
-              <OutlineNavItem
-                to="/Home"
-                label="Home"
-                active={location.pathname === "/"}
+    <>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @font-face {
+              font-family: 'CustomMovieFont';
+              src: url('/fonts/font.ttf') format('truetype');
+              font-weight: normal;
+              font-style: normal;
+            }
+          `,
+        }}
+      />
+
+      <AppBar
+        position="sticky"
+        sx={{
+          backgroundColor: "rgba(44,44,44,0.95)",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+          fontFamily: "CustomMovieFont, sans-serif",
+        }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box
+              display="flex"
+              alignItems="center"
+              sx={{ cursor: "pointer" }}
+              onClick={() => navigate("/dashboard")}
+            >
+              <Box
+                component="img"
+                src="/Logo.png"
+                alt="Movie Club Logo"
+                sx={{ height: 80, width: "auto", mr: 1 }}
               />
-              <OutlineNavItem
-                to="/profile"
-                label="Profile"
-                active={location.pathname === "/profile"}
-              />
-              <OutlineNavItem
-                to="/ai-assistant"
-                label="AI Assistant"
-                active={location.pathname === "/ai-assistant"}
-              />
-              <OutlineNavItem
-                to="/about"
-                label="About"
-                active={location.pathname === "/about"}
-              />
-              <button
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{
+                  color: "#F44336",
+                  "&:hover": { opacity: 0.8 },
+                  transition: "0.3s ease",
+                  fontFamily: "CustomMovieFont, sans-serif",
+                }}
+              >
+                Movie Club
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+              <Button
+                color="inherit"
+                sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
+                onClick={() => navigate("/dashboard")}
+              >
+                Home
+              </Button>
+              <Button
+                color="inherit"
+                sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
+                onClick={() => navigate("/forum")}
+              >
+                Forum
+              </Button>
+              <Button
+                color="inherit"
+                sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
+                onClick={() => navigate("/ai-recommend")}
+              >
+                AI Recommendation
+              </Button>
+              <Button
+                color="inherit"
+                sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
+                onClick={() => navigate("/about")}
+              >
+                About Us
+              </Button>
+              <Button
+                color="inherit"
+                sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
+                onClick={() => navigate("/profile")}
+              >
+                Profile
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  bgcolor: "#F44336",
+                  color: "#fff",
+                  fontFamily: "CustomMovieFont, sans-serif",
+                  "&:hover": { bgcolor: "#c62828" },
+                }}
                 onClick={handleLogout}
-                className="border border-blue-600 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-600 hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Logout
-              </button>
-            </>
-          )}
-        </div>
-
-        <div className="sm:hidden flex items-center">
-          <button
-            className="text-blue-600 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={() => {}}
-          >
-            <i className="fas fa-bars"></i>
-          </button>
-        </div>
-      </div>
-    </nav>
+              </Button>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </>
   );
 };
 
-const OutlineNavItem: React.FC<{ to: string; label: string; active: boolean }> = ({
-  to,
-  label,
-  active,
-}) => {
-  return (
-    <Link
-      to={to}
-      className={`border border-blue-600 text-blue-600 px-4 py-2 rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 
-        ${active ? "bg-blue-600 text-white" : "hover:bg-blue-500 hover:text-white"}`}
-    >
-      {label}
-    </Link>
-  );
-};
-
-export default NavBar;
+export default Navbar;

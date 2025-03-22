@@ -1,125 +1,234 @@
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { useTitle } from "../hooks/useTitle";
-import { useState } from "react";
-import { authService } from "../services/AuthService";
-import Logo from "../assets/Logo.png";
+import React, { useState } from "react";
+import axios from "axios";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Card,
+  Divider,
+  Box,
+  Avatar,
+  IconButton,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { AddPhotoAlternate } from "@mui/icons-material";
 
-interface RegisterForm {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-function Register() {
-  useTitle("Register");
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<RegisterForm>();
-
+const Register: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string>("/default-avatar.png"); // Default avatar
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const onSubmit = async (data: RegisterForm) => {
-    if (data.password !== data.confirmPassword) {
-      setError("Passwords do not match");
-      return;
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfileImage(file);
+      setPreviewImage(URL.createObjectURL(file)); // Show image preview
     }
-    setLoading(true);
-    setError(null);
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      await authService.register(data);
-      navigate("/profile");
-    } catch (err: any) {
-      console.error(err);
-      setError(err.response?.data?.message || "Registration failed");
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("password", password);
+      if (profileImage) {
+        formData.append("profileImage", profileImage);
+      }
+
+      await axios.post("http://localhost:4000/api/auth/register", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      navigate("/login");
+    } catch (error) {
+      alert("Registration failed.");
     }
-    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
-        <div className="flex justify-center mb-8">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="w-30 h-20"
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `linear-gradient(rgba(210, 201, 201, 0.9), rgba(0,0,0,0.9)), url('/backround.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        py: 6,
+        fontFamily: "CustomMovieFont, sans-serif",
+      }}
+    >
+      {/* 🔤 Load Custom Font */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @font-face {
+              font-family: 'CustomMovieFont';
+              src: url('/fonts/font.ttf') format('truetype');
+              font-weight: normal;
+              font-style: normal;
+            }
+          `,
+        }}
+      />
+
+      <Container maxWidth="xs">
+        <Card
+          sx={{
+            p: 4,
+            textAlign: "center",
+            borderRadius: "16px",
+            backgroundColor: "rgba(44,44,44,0.95)",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          {/* 🔹 Logo */}
+          <Box
+            component="img"
+            src="/Logo.png"
+            alt="Movie Club Logo"
+            sx={{ width: 180, height: "auto", mx: "auto", mb: 2 }}
           />
-        </div>
-        <h1 className="text-2xl font-semibold text-center text-gray-500 mt-8 mb-6">Register</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm text-gray-600">First Name</label>
-            <input
-              {...register("firstName", { required: "First Name is required" })}
-              type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            />
-            {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm text-gray-600">Last Name</label>
-            <input
-              {...register("lastName", { required: "Last Name is required" })}
-              type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            />
-            {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm text-gray-600">Email</label>
-            <input
-              {...register("email", {
-                required: "Email is required",
-                pattern: { value: /\S+@\S+\.\S+/, message: "Enter a valid email" },
-              })}
-              type="email"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm text-gray-600">Password</label>
-            <input
-              {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })}
-              type="password"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-          </div>
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-600">Confirm Password</label>
-            <input
-              {...register("confirmPassword", { required: "Please confirm your password" })}
-              type="password"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            />
-            {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
-          </div>
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-          <button
-            type="submit"
-            className="w-32 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white py-2 rounded-lg mx-auto block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-2"
-            disabled={loading}
+
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color="#F44336"
+            sx={{ mb: 3, fontFamily: "CustomMovieFont, sans-serif" }}
           >
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-        <div className="text-center">
-          <p className="text-sm">
-            Already have an account? <Link to="/login" className="text-cyan-600">Sign in</Link>
-          </p>
-        </div>
-        <p className="text-xs text-gray-600 text-center mt-8">&copy; 2023 WCS LAT</p>
-      </div>
-    </div>
+            Create Your Account
+          </Typography>
+
+          {/* 🔹 Profile Picture Upload */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Avatar
+              src={previewImage}
+              sx={{ width: 100, height: 100, mb: 1, bgcolor: "#F44336" }}
+            />
+            <IconButton component="label">
+              <AddPhotoAlternate sx={{ color: "#F44336" }} />
+              <input type="file" hidden onChange={handleImageChange} />
+            </IconButton>
+            <Typography variant="caption" color="#ccc">
+              Upload Profile Picture
+            </Typography>
+          </Box>
+
+          {/* 🔹 Register Form */}
+          <form onSubmit={handleRegister}>
+            <TextField
+              fullWidth
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              sx={{
+                mb: 2,
+                input: { color: "#fff" },
+                label: { color: "#ccc" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  backgroundColor: "#1e1e1e",
+                  "& fieldset": {
+                    borderColor: "#ccc", // Add border color for better visibility
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#F44336", // Highlight border on hover
+                  },
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                mb: 2,
+                input: { color: "#fff" },
+                label: { color: "#ccc" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  backgroundColor: "#1e1e1e",
+                  "& fieldset": {
+                    borderColor: "#ccc", // Add border color for better visibility
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#F44336", // Highlight border on hover
+                  },
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              sx={{
+                mb: 3,
+                input: { color: "#fff" },
+                label: { color: "#ccc" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  backgroundColor: "#1e1e1e",
+                  "& fieldset": {
+                    borderColor: "#ccc", // Add border color for better visibility
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#F44336", // Highlight border on hover
+                  },
+                },
+              }}
+            />
+            <Button
+              variant="contained"
+              fullWidth
+              type="submit"
+              sx={{
+                bgcolor: "#F44336",
+                "&:hover": { bgcolor: "#c62828" },
+                fontFamily: "CustomMovieFont, sans-serif",
+              }}
+            >
+              Register
+            </Button>
+          </form>
+
+          {/* 🔹 Divider */}
+          <Divider sx={{ my: 3, color: "#fff" }} />
+
+          {/* 🔹 Login Navigation */}
+          <Typography variant="body2" sx={{ color: "#fff" }}>
+            Already have an account?
+          </Typography>
+          <Button
+            variant="text"
+            fullWidth
+            onClick={() => navigate("/login")}
+            sx={{ color: "#F44336", fontWeight: "bold" }}
+          >
+            Login Here
+          </Button>
+        </Card>
+      </Container>
+    </Box>
   );
-}
+};
 
 export default Register;

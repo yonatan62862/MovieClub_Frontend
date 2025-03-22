@@ -1,119 +1,193 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { authService } from "../services/AuthService";
-import { useTitle } from "../hooks/useTitle";
-import { GoogleLogin } from '@react-oauth/google';
-
-
-interface LoginForm {
-  email: string;
-  password: string;
-}
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Card,
+  Divider,
+  Box,
+} from "@mui/material";
+import { Google } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
-  useTitle("Login");
-  const { register, handleSubmit } = useForm<LoginForm>();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const onSubmit = async (data: LoginForm) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await authService.login(data);
-      navigate("/Home");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed");
-      console.error("Login Error:", err.response?.data || err);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
+      navigate("/dashboard");
     }
-    setLoading(false);
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        "http://localhost:4000/api/auth/login",
+        { email, password }
+      );
+
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+    } catch (error) {
+      alert("Login failed. Check your credentials.");
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:4000/api/auth/google";
   };
 
   return (
-    <div className="font-sans">
-      <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100">
-        <div className="relative sm:max-w-sm w-full">
-          <div className="card bg-blue-400 shadow-lg w-full h-full rounded-3xl absolute transform -rotate-6"></div>
-          <div className="card bg-red-400 shadow-lg w-full h-full rounded-3xl absolute transform rotate-6"></div>
-          <div className="relative w-full rounded-3xl px-6 py-4 bg-gray-100 shadow-md">
-            <label className="block mt-3 text-sm text-gray-700 text-center font-semibold">
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `linear-gradient(rgba(210, 201, 201, 0.9), rgba(0,0,0,0.9)), url('/backround.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        py: 6,
+        fontFamily: "CustomMovieFont, sans-serif",
+      }}
+    >
+      {/* 🔤 Load Custom Font */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @font-face {
+              font-family: 'CustomMovieFont';
+              src: url('/fonts/font.ttf') format('truetype');
+              font-weight: normal;
+              font-style: normal;
+            }
+          `,
+        }}
+      />
+
+      <Container maxWidth="xs">
+        <Card
+          sx={{
+            mt: 4,
+            p: 4,
+            textAlign: "center",
+            borderRadius: "16px",
+            backgroundColor: "rgba(44,44,44,0.95)",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          {/* 🔹 Logo */}
+          <Box
+            component="img"
+            src="/Logo.png"
+            alt="Wellness Hub Logo"
+            sx={{ width: 180, height: "auto", mx: "auto", mb: 2 }}
+          />
+
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            color="#F44336"
+            sx={{ mb: 3, fontFamily: "CustomMovieFont, sans-serif" }}
+          >
+            Welcome to Movie Club
+          </Typography>
+
+          <form onSubmit={handleLogin}>
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                mb: 2,
+                input: { color: "#fff" },
+                label: { color: "#ccc" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  backgroundColor: "#1e1e1e",
+                  "& fieldset": {
+                    borderColor: "#ccc", // Add border color for better visibility
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#F44336", // Highlight border on hover
+                  },
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              sx={{
+                mb: 3,
+                input: { color: "#fff" },
+                label: { color: "#ccc" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  backgroundColor: "#1e1e1e",
+                  "& fieldset": {
+                    borderColor: "#ccc", // Add border color for better visibility
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#F44336", // Highlight border on hover
+                  },
+                },
+              }}
+            />
+            <Button
+              variant="contained" // Fixed typo here
+              fullWidth
+              type="submit"
+              sx={{
+                bgcolor: "#F44336",
+                "&:hover": { bgcolor: "#c62828" },
+                fontFamily: "CustomMovieFont, sans-serif",
+              }}
+            >
               Login
-            </label>
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-10">
-              {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-              <div>
-                <input
-                  {...register("email")}
-                  type="email"
-                  placeholder="Email Address"
-                  className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
-                />
-              </div>
-              <div className="mt-7">
-                <input
-                  {...register("password")}
-                  type="password"
-                  placeholder="Password"
-                  className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
-                />
-              </div>
-              <div className="mt-7 flex">
-                <label className="inline-flex items-center w-full cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-200"
-                  />
-                  <span className="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-                <div className="w-full text-right">
-                  <a className="underline text-sm text-gray-600 hover:text-gray-900" href="#">
-                    Forgot your password?
-                  </a>
-                </div>
-              </div>
-              <div className="mt-7">
-                <button
-                  type="submit"
-                  className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
-                  disabled={loading}
-                >
-                  {loading ? "Logging in..." : "Login"}
-                </button>
-              </div>
-              <div className="flex mt-7 items-center text-center">
-                <hr className="border-gray-300 border-1 w-full rounded-md" />
-                <label className="block font-medium text-sm text-gray-600 w-full">Sign in with</label>
-                <hr className="border-gray-300 border-1 w-full rounded-md" />
-              </div>
-              <div className="flex mt-7 justify-center w-full">
-                <button className="mr-5 bg-blue-500 px-4 py-2 rounded-xl text-white shadow-xl hover:shadow-inner transition duration-500 transform hover:-translate-x hover:scale-105">
-                  Facebook
-                </button>
-                <GoogleLogin
-                onSuccess={() => {
-                   window.location.href = "http://localhost:3000/api/auth/google";
-                    }}
-                    onError={() => {
-                       console.log('Google login failed');
-                       }}
-                       />
-              </div>
-              <div className="mt-7 flex justify-center items-center">
-                <label className="mr-2">Don't have an account yet?</label>
-                <Link
-                  to="/register"
-                  className="text-blue-500 transition duration-500 transform hover:-translate-x hover:scale-105"
-                >
-                  Sign up
-                </Link>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </form>
+
+          <Divider sx={{ my: 3, color: "#fff" }}>or</Divider>
+
+          <Button
+            variant="contained"
+            fullWidth
+            startIcon={<Google />}
+            onClick={handleGoogleLogin}
+            sx={{ bgcolor: "#fff", color: "#F44336", "&:hover": { bgcolor: "#E9ECEF" } }}
+          >
+            Login with Google
+          </Button>
+
+          <Typography variant="body2" sx={{ mt: 3, color: "#fff" }}>
+            Don't have an account?
+          </Typography>
+          <Button
+            variant="text"
+            fullWidth
+            onClick={() => navigate("/register")}
+            sx={{ color: "#F44336", fontWeight: "bold" }}
+          >
+            Register Now
+          </Button>
+        </Card>
+      </Container>
+    </Box>
   );
 };
 

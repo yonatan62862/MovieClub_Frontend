@@ -1,39 +1,93 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AIAssistant from "./pages/AIAssistant";
-import Home from "./pages/Home";
+import React, { JSX } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Login from "./pages/Login";
-import Page404 from "./pages/Page404";
-import Profile from "./pages/UserProfile";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import Forum from "./pages/Forum";
+import AIRecommendation from "./pages/AIRecommendation";
+import Comments from "./pages/Comments";
+import Navbar from "./components/Navbar";
 import About from "./pages/About";
-import GoogleAuth from "./pages/GoogleAuth";
 
-const App: React.FC = () => {
-  const ROUTES = [
-    { element: <Login />, path: "/login" },
-    { element: <Register />, path: "/register" },
-    { element: <GoogleAuth />, path: "/google-auth" },
-    { element: <About />, path: "/about" },
-    { element: <Page404 />, path: "*" }
-  ];
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/login" />;
+};
+
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+  const hideNavbar =
+    location.pathname === "/login" || location.pathname === "/register";
 
   return (
     <>
-      <NavBar />
-      <Routes>
-        {ROUTES.map(({ element, path }) => (
-          <Route key={path} path={path} element={element} />
-        ))}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/Home" element={<Home />} />
-          <Route path="/ai-assistant" element={<AIAssistant />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-      </Routes>
+      {!hideNavbar && <Navbar />}
+      {children}
     </>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          {/* Redirect the root ("/") to "/login" */}
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/about" element={<About />} />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/forum"
+            element={
+              <PrivateRoute>
+                <Forum />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/ai-recommend"
+            element={
+              <PrivateRoute>
+                <AIRecommendation />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/comments/:postId"
+            element={
+              <PrivateRoute>
+                <Comments />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Layout>
+    </Router>
   );
 };
 
