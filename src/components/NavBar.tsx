@@ -101,7 +101,7 @@ const Navbar: React.FC = () => {
                 sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
                 onClick={() => navigate("/profile")}
               >
-              MyProfile
+              My Profile
               </Button>
               <Button
                 variant="contained"
