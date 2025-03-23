@@ -70,7 +70,7 @@ const AIRecommendation: React.FC = () => {
           fontFamily: "CustomMovieFont, sans-serif",
         }}
       >
-         AI Movie Picks 🎥
+        AI Movie Picks 🎥
       </Typography>
 
       <Container maxWidth="md">
@@ -164,19 +164,27 @@ const AIRecommendation: React.FC = () => {
                   const linkMatch = line.match(
                     /\[Watch Here\]\((https?:\/\/[^\s]+)\)/
                   );
+
                   if (linkMatch) {
+                    const movieTitleMatch =
+                      recommendations[index - 1]?.match(/\*\*(.*?)\*\*/);
+                    const movieTitle = movieTitleMatch
+                      ? movieTitleMatch[1]
+                      : "IMDb Link";
+
                     return (
                       <ListItem key={index} sx={{ pb: 1 }}>
                         <ListItemText
                           primary={
                             <Typography variant="body1">
+                              <strong style={{ color: "#F44336" }}>Movie Link:</strong>{" "}
                               <a
                                 href={linkMatch[1]}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{ color: "#F44336", fontWeight: "bold" }}
                               >
-                                {linkMatch[1]}
+                                {movieTitle}
                               </a>
                             </Typography>
                           }
@@ -184,6 +192,7 @@ const AIRecommendation: React.FC = () => {
                       </ListItem>
                     );
                   }
+
                   return (
                     <ListItem key={index}>
                       <ListItemText
