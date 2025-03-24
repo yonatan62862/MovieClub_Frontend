@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import apiClient from "../services/api-client"; 
+
 import {
   Container,
   TextField,
@@ -30,10 +32,8 @@ const Login: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        "http://localhost:4000/api/auth/login",
-        { email, password }
-      );
+      const { data } = await apiClient.post("/api/auth/login", { email, password });
+
 
       localStorage.setItem("token", data.token);
       navigate("/dashboard");
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:4000/api/auth/google";
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
   };
 
   return (

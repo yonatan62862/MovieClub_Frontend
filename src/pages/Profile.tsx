@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import apiClient from "../services/api-client";
+
 import {
   TextField,
   Button,
@@ -36,17 +38,17 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("http://localhost:4000/api/user/profile", {
+      const { data } = await apiClient.get("/api/user/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(data);
       setUsername(data.username);
-      setPreviewImage(`http://localhost:4000${data.profileImage}`);
+      setPreviewImage(`${import.meta.env.VITE_BACKEND_URL}${data.profileImage}`)
     };
 
     const fetchMyPosts = async () => {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("http://localhost:4000/api/posts/mine", {
+      const { data } = await apiClient.get("/api/user/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPosts(data);
@@ -70,12 +72,12 @@ const Profile: React.FC = () => {
     formData.append("username", username);
     if (profileImage) formData.append("profileImage", profileImage);
 
-    await axios.put("http://localhost:4000/api/user/profile", formData, {
+    await apiClient.get("/api/user/profile"), formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
       },
-    });
+    };
 
     window.location.reload();
   };
@@ -218,7 +220,7 @@ const Profile: React.FC = () => {
                   {post.image && (
                     <Box display="flex" justifyContent="center" mt={2}>
                       <img
-                        src={`http://localhost:4000${post.image}`}
+                        src={`${import.meta.env.VITE_BACKEND_URL}${post.image}`}
                         alt="Post"
                         style={{ maxWidth: "100%", borderRadius: "10px" }}
                       />

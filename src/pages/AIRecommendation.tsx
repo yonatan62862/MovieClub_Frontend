@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import apiClient from "../services/api-client";
+
 import {
   Container,
   TextField,
@@ -21,9 +23,9 @@ const AIRecommendation: React.FC = () => {
   const handleGetRecommendations = async () => {
     if (!input) return alert("Please enter a description or genre");
 
-    const token = localStorage.getItem("token");
-    const { data } = await axios.post(
-      "http://localhost:4000/api/ai-recommend",
+  const token = localStorage.getItem("token");
+    const { data } = await apiClient.post(
+      "/api/ai-recommend",
       { symptoms: input },
       { headers: { Authorization: `Bearer ${token}` } }
     );

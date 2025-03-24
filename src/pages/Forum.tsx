@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import apiClient from "../services/api-client";
+
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -49,7 +51,7 @@ const Forum: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get("http://localhost:4000/api/user/profile", {
+      const { data } = await apiClient.get("/api/user/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUserId(data._id);
@@ -61,14 +63,14 @@ const Forum: React.FC = () => {
 
   const fetchPosts = async () => {
     const token = localStorage.getItem("token");
-    const { data } = await axios.get("http://localhost:4000/api/posts", {
+    const { data } = await apiClient.get("/api/posts", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     const updatedPosts = await Promise.all(
       data.map(async (post: Post) => {
-        const { data: comments } = await axios.get(
-          `http://localhost:4000/api/comments/${post._id}`,
+        const { data: comments } = await apiClient.get(
+          `/api/comments/${post._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         return { ...post, commentsCount: comments.length };
@@ -102,7 +104,7 @@ const Forum: React.FC = () => {
     formData.append("text", text);
     if (image) formData.append("image", image);
 
-    await axios.post("http://localhost:4000/api/posts", formData, {
+    await apiClient.post("/api/posts", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -117,7 +119,7 @@ const Forum: React.FC = () => {
 
   const handleLikePost = async (postId: string) => {
     const token = localStorage.getItem("token");
-    await axios.post(`http://localhost:4000/api/posts/${postId}/like`, {}, {
+    await apiClient.post(`/api/posts/${postId}/like`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -126,7 +128,7 @@ const Forum: React.FC = () => {
 
   const handleDeletePost = async (postId: string) => {
     const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:4000/api/posts/${postId}`, {
+    await apiClient.delete(`/api/posts/${postId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -146,7 +148,7 @@ const Forum: React.FC = () => {
     formData.append("text", editedText);
     if (editedImage) formData.append("image", editedImage);
 
-    await axios.put(`http://localhost:4000/api/posts/${postId}`, formData, {
+    await apiClient.put(`/api/posts/${postId}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -235,7 +237,7 @@ const Forum: React.FC = () => {
             <CardHeader
               avatar={
                 post.user?.profileImage ? (
-                  <Avatar src={`http://localhost:4000${post.user.profileImage}`} />
+                  <Avatar src={`${import.meta.env.VITE_BACKEND_URL}${post.user.profileImage}`} />
                 ) : (
                   <Avatar>{post.user?.username?.charAt(0) || "?"}</Avatar>
                 )
@@ -273,7 +275,7 @@ const Forum: React.FC = () => {
             {post.image && !editingPost && (
               <CardMedia
                 component="img"
-                image={`http://localhost:4000${post.image}`}
+                image={`${import.meta.env.VITE_BACKEND_URL}${post.image}`}
                 sx={{ maxHeight: 300 }}
               />
             )}

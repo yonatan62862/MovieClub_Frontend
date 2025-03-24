@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import apiClient from "../services/api-client";
+
 import {
   Container,
   TextField,
@@ -42,12 +44,9 @@ const Comments: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
-      const { data } = await axios.get(
-        "http://localhost:4000/api/user/profile",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const { data } = await apiClient.get("/api/user/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUserId(data._id);
     };
 
@@ -57,12 +56,9 @@ const Comments: React.FC = () => {
 
   const fetchComments = async () => {
     const token = localStorage.getItem("token");
-    const { data } = await axios.get(
-      `http://localhost:4000/api/comments/${postId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const { data } = await apiClient.get(`/api/comments/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setComments(data);
   };
 
@@ -70,8 +66,8 @@ const Comments: React.FC = () => {
     if (!text) return alert("Comment cannot be empty");
 
     const token = localStorage.getItem("token");
-    await axios.post(
-      "http://localhost:4000/api/comments",
+    await apiClient.post(
+      "/api/comments",
       { postId, text },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -89,8 +85,8 @@ const Comments: React.FC = () => {
 
   const handleSaveEdit = async (commentId: string) => {
     const token = localStorage.getItem("token");
-    await axios.put(
-      `http://localhost:4000/api/comments/${commentId}`,
+    await apiClient.put(
+      `/api/comments/${commentId}`,
       { text: editedText },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -103,7 +99,7 @@ const Comments: React.FC = () => {
 
   const handleDeleteComment = async (commentId: string) => {
     const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:4000/api/comments/${commentId}`, {
+    await apiClient.delete(`/api/comments/${commentId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -205,7 +201,7 @@ const Comments: React.FC = () => {
               >
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                   <Avatar
-                    src={`http://localhost:4000${comment.user.profileImage}`}
+                    src={`${import.meta.env.VITE_BACKEND_URL}${comment.user.profileImage}`}
                     sx={{ width: 40, height: 40, mr: 2 }}
                   />
                   <Typography

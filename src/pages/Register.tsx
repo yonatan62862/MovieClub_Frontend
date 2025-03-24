@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import apiClient from "../services/api-client";
+
 import {
   Container,
   TextField,
@@ -41,7 +43,7 @@ const Register: React.FC = () => {
         formData.append("profileImage", profileImage);
       }
 
-      await axios.post("http://localhost:4000/api/auth/register", formData, {
+      await apiClient.post("/api/auth/register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
