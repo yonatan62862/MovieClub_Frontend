@@ -14,19 +14,9 @@ import {
   Box,
 } from "@mui/material";
 import { Edit, Save } from "@mui/icons-material";
+import { Post } from "../models/registerPostModel";
+import { User } from "../models/userModel";
 
-interface Post {
-  _id: string;
-  text: string;
-  image?: string;
-  likes: string[];
-  createdAt: string;
-}
-
-interface User {
-  username: string;
-  profileImage: string;
-}
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -95,7 +85,6 @@ const Profile: React.FC = () => {
         fontFamily: "CustomMovieFont, sans-serif",
       }}
     >
-      {/* 🔤 Load Custom Font */}
       <style
         dangerouslySetInnerHTML={{
           __html: `

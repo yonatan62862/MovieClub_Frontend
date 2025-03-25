@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import apiClient from "../services/api-client";
-
+import { Post } from "../models/forumPostModel"
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -25,16 +25,6 @@ import {
   Save,
   Cancel,
 } from "@mui/icons-material";
-
-interface Post {
-  _id: string;
-  user: { _id: string; username: string; profileImage: string };
-  text: string;
-  image?: string;
-  likes: string[];
-  createdAt: string;
-  commentsCount?: number;
-}
 
 const Forum: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);

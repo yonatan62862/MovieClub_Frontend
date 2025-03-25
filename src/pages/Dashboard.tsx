@@ -14,10 +14,8 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     if (videoRef.current) {
-      // Set the video start time to 20 seconds
       videoRef.current.currentTime = 20;
 
-      // Enable autoplay with sound (requires user interaction on some browsers)
       videoRef.current.play().catch((error) => {
         console.error("Autoplay failed:", error);
       });

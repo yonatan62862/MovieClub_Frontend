@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import apiClient from "../services/api-client";
-
+import { Comment } from "../models/commentModel"
 import {
   Container,
   TextField,
@@ -24,13 +24,6 @@ import {
   Cancel,
   Delete,
 } from "@mui/icons-material";
-
-interface Comment {
-  _id: string;
-  user: { _id: string; username: string; profileImage: string };
-  text: string;
-  createdAt: string;
-}
 
 const Comments: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
