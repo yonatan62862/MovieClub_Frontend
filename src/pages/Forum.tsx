@@ -265,7 +265,7 @@ const Forum: React.FC = () => {
             {post.image && !editingPost && (
               <CardMedia
                 component="img"
-                image={`${import.meta.env.VITE_BACKEND_URL}${post.image}`}
+                image={`https://node17.cs.colman.ac.il${post.image}`}
                 sx={{ maxHeight: 300 }}
               />
             )}

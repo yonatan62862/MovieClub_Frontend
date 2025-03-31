@@ -14,9 +14,21 @@ import {
   Box,
 } from "@mui/material";
 import { Edit, Save } from "@mui/icons-material";
-import { Post } from "../models/registerPostModel";
-import { User } from "../models/userModel";
 
+
+interface Post {
+  _id: string;
+  text: string;
+  image?: string;
+  likes: string[];
+  createdAt: string;
+}
+
+interface User {
+  _id: string;
+  username: string;
+  profileImage: string;
+}
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -38,10 +50,11 @@ const Profile: React.FC = () => {
 
     const fetchMyPosts = async () => {
       const token = localStorage.getItem("token");
-      const { data } = await apiClient.get("/api/user/profile", {
+      const { data } = await apiClient.get("/api/posts/mine", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPosts(data);
+      console.log(data)
     };
 
     fetchProfile();
@@ -62,15 +75,20 @@ const Profile: React.FC = () => {
     formData.append("username", username);
     if (profileImage) formData.append("profileImage", profileImage);
 
-    await apiClient.get("/api/user/profile"), formData, {
+    await apiClient.put(`/api/user/profile/${user?._id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
       },
-    };
+    })
+    setUser(prevUser => ({
+      ...prevUser!,
+      username,
+      profileImage: `/uploads/${profileImage?.name}`,
+    }));
 
-    window.location.reload();
   };
+
 
   return (
     <Box
@@ -209,7 +227,7 @@ const Profile: React.FC = () => {
                   {post.image && (
                     <Box display="flex" justifyContent="center" mt={2}>
                       <img
-                        src={`${import.meta.env.VITE_BACKEND_URL}${post.image}`}
+                        src={`${import.meta.env.VITE_BACKEND_URL}${post.image?.startsWith("/uploads/") ? post.image : `/uploads/${post.image}`}`}
                         alt="Post"
                         style={{ maxWidth: "100%", borderRadius: "10px" }}
                       />

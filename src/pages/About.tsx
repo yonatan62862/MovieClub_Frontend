@@ -42,7 +42,7 @@ const About: React.FC = () => {
           fontWeight="bold"
           sx={{ mb: 4, color: "#F44336", fontFamily: "CustomMovieFont, sans-serif" }}
         >
-          About Movie Club 🎥 
+          About Movie Club 🎥
         </Typography>
 
         <Card
@@ -109,57 +109,11 @@ const About: React.FC = () => {
                 variant="body2"
                 sx={{ color: "#ccc", mt: 1, fontFamily: "CustomMovieFont, sans-serif" }}
               >
-              Romantic at heart,loves clever and feel-good comedies.
+                Romantic at heart,loves clever and feel-good comedies.
               </Typography>
               <Typography
                 component="a"
                 href="https://www.linkedin.com/in/bar-kobi/"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  mt: 1,
-                  display: "block",
-                  color: "#2196f3",
-                  textDecoration: "underline",
-                  fontFamily: "CustomMovieFont, sans-serif",
-                }}
-              >
-                LinkedIn
-              </Typography>
-            </Card>
-          </Grid>
-
-          {/* 🔹 Nitzan */}
-          <Grid item xs={12} sm={4}>
-            <Card
-              sx={{
-                p: 3,
-                textAlign: "center",
-                backgroundColor: "rgba(33,33,33,0.95)",
-                borderRadius: "16px",
-              }}
-            >
-              <Avatar
-                src="/images/nitzan.jpg"
-                alt="Nitzan"
-                sx={{ width: 120, height: 120, mx: "auto", mb: 2 }}
-              />
-              <Typography
-                variant="h6"
-                fontWeight="bold"
-                sx={{ color: "#F44336", fontFamily: "CustomMovieFont, sans-serif" }}
-              >
-                Nitzan
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: "#ccc", mt: 1, fontFamily: "CustomMovieFont, sans-serif" }}
-              >
-                Big fan of comedy-dramas with meaning and emotion.
-              </Typography>
-              <Typography
-                component="a"
-                href="https://www.linkedin.com/in/nitzannaveh/"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
@@ -206,6 +160,52 @@ const About: React.FC = () => {
               <Typography
                 component="a"
                 href="https://www.linkedin.com/in/yonatan-cohen-a22054312/"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  mt: 1,
+                  display: "block",
+                  color: "#2196f3",
+                  textDecoration: "underline",
+                  fontFamily: "CustomMovieFont, sans-serif",
+                }}
+              >
+                LinkedIn
+              </Typography>
+            </Card>
+          </Grid>
+
+          {/* 🔹 Nitzan */}
+          <Grid item xs={12} sm={4}>
+            <Card
+              sx={{
+                p: 3,
+                textAlign: "center",
+                backgroundColor: "rgba(33,33,33,0.95)",
+                borderRadius: "16px",
+              }}
+            >
+              <Avatar
+                src="/images/Nitzan.jpg"
+                alt="Nitzan"
+                sx={{ width: 120, height: 120, mx: "auto", mb: 2 }}
+              />
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{ color: "#F44336", fontFamily: "CustomMovieFont, sans-serif" }}
+              >
+                Nitzan
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: "#ccc", mt: 1, fontFamily: "CustomMovieFont, sans-serif" }}
+              >
+                Big fan of comedy-dramas with meaning and emotion.
+              </Typography>
+              <Typography
+                component="a"
+                href="https://www.linkedin.com/in/nitzannaveh/"
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
