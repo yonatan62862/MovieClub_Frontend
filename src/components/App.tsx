@@ -15,6 +15,13 @@ import AIRecommendation from "../pages/AIRecommendation";
 import Comments from "../pages/Comments";
 import Navbar from "./NavBar";
 import About from "../pages/About";
+import ChatPage from "../pages/ChatPage";
+
+
+const storedUser = localStorage.getItem("user");
+const currentUser = storedUser ? JSON.parse(storedUser) : null;
+console.log("token:", localStorage.getItem("token"));
+console.log("user:", localStorage.getItem("user"));
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem("token");
@@ -39,10 +46,8 @@ const App: React.FC = () => {
     <Router>
       <Layout>
         <Routes>
-          {/* Redirect the root ("/") to "/login" */}
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/about" element={<About />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
@@ -82,6 +87,18 @@ const App: React.FC = () => {
             element={
               <PrivateRoute>
                 <Comments />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <PrivateRoute>
+                {currentUser ? (
+                  <ChatPage/>
+                ) : (
+                  <Navigate to="/login" />
+                )}
               </PrivateRoute>
             }
           />

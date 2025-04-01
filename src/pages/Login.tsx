@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import apiClient from "../services/api-client"; 
+import apiClient from "../services/api-client";
 
 import {
   Container,
@@ -36,6 +36,8 @@ const Login: React.FC = () => {
 
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      
       navigate("/dashboard");
     } catch (error) {
       alert("Login failed. Check your credentials.");
