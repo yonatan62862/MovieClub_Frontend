@@ -53,14 +53,14 @@ export function ChatWindow({ chat, currentUser }: Props) {
   };
 
   return (
-    <div className="flex flex-col flex-grow p-4 bg-white rounded-lg shadow-md">
-      <div className="flex flex-col flex-grow overflow-y-auto space-y-3 mb-4 px-2">
+    <div className="flex flex-col h-full p-4 bg-white rounded-lg shadow-md">
+      <div className="flex flex-col flex-grow overflow-y-auto space-y-3 px-2 scrollbar-thin scrollbar-thumb-gray-300">
         {messages.map((msg, idx) => (
           <div
             key={idx}
             className={`max-w-xs px-4 py-2 rounded-lg text-sm shadow-sm break-words ${
               msg.senderId === currentUser._id
-                ? "bg-blue-500 text-white self-end rounded-br-none"
+                ? "bg-blue-600 text-white self-end rounded-br-none"
                 : "bg-gray-100 text-gray-800 self-start rounded-bl-none"
             }`}
           >
@@ -70,7 +70,7 @@ export function ChatWindow({ chat, currentUser }: Props) {
         <div ref={messagesEndRef} />
       </div>
   
-      <div className="flex items-center gap-2 border-t pt-4">
+      <div className="flex items-center gap-2 border-t pt-4 mt-4">
         <input
           type="text"
           value={newMessage}
