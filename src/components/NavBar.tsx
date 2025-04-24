@@ -84,18 +84,6 @@ const Navbar: React.FC = () => {
               </Button>
               <Button
                 color="inherit"
-                sx={{
-                  fontSize: "16px",
-                  textTransform: "none",
-                  color: "#fff",
-                  fontFamily: "CustomMovieFont, sans-serif"
-                }}
-                onClick={() => navigate("/chat")}
-              >
-                Chat
-              </Button>
-              <Button
-                color="inherit"
                 sx={{ fontSize: "16px", textTransform: "none", color: "#fff", fontFamily: "CustomMovieFont, sans-serif" }}
                 onClick={() => navigate("/ai-recommend")}
               >

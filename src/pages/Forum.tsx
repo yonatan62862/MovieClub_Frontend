@@ -11,7 +11,6 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
   IconButton,
   TextField,
   Typography,
@@ -27,7 +26,6 @@ import {
 } from "@mui/icons-material";
 import { socketService } from "../services/socket-service";
 import { Message } from "../models/messageModel";
-import { Chat } from "../models/chatModel";
 
 const Forum: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -115,7 +113,6 @@ const Forum: React.FC = () => {
     await apiClient.post(`/api/posts/${postId}/like`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     fetchPosts();
   };
 
@@ -124,7 +121,6 @@ const Forum: React.FC = () => {
     await apiClient.delete(`/api/posts/${postId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     fetchPosts();
   };
 
@@ -157,17 +153,6 @@ const Forum: React.FC = () => {
     console.log(msg);
   };
 
-  const handleChat = (chat: Chat) => {
-    console.log(chat);
-  };
-  
-  useEffect(() => {
-    socketService.connect(handleMessage, handleChat);
-    return () => {
-      socketService.disconnect();
-    };
-  }, []);
-
   return (
     <Box
       sx={{
@@ -180,28 +165,11 @@ const Forum: React.FC = () => {
         py: 4,
       }}
     >
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            @font-face {
-              font-family: 'CustomMovieFont';
-              src: url('/fonts/font.ttf') format('truetype');
-              font-weight: normal;
-              font-style: normal;
-            }
-          `,
-        }}
-      />
-
       <Typography
         variant="h3"
         fontWeight="bold"
         textAlign="center"
-        sx={{
-          color: "#F44336",
-          mb: 4,
-          fontFamily: "CustomMovieFont, sans-serif",
-        }}
+        sx={{ color: "#F44336", mb: 4, fontFamily: "CustomMovieFont, sans-serif" }}
       >
         Let's Talk Movies... 🎬
       </Typography>
@@ -216,7 +184,6 @@ const Forum: React.FC = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             sx={{ mb: 2, input: { color: "#fff" }, textarea: { color: "#fff" } }}
-            InputLabelProps={{ style: { color: "#fff" } }}
           />
           <Box display="flex" alignItems="center" gap={2}>
             <IconButton component="label" sx={{ color: "#F44336" }}>
@@ -232,11 +199,25 @@ const Forum: React.FC = () => {
             </Button>
           </Box>
           {previewImage && (
-            <CardMedia
-              component="img"
-              image={previewImage}
-              sx={{ mt: 2, maxHeight: 250 }}
-            />
+            <Box
+              sx={{
+                width: "100%",
+                height: "360px",
+                backgroundColor: "#000",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "8px",
+                overflow: "hidden",
+                mt: 2,
+              }}
+            >
+              <img
+                src={previewImage}
+                alt="Preview"
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+            </Box>
           )}
         </Card>
 
@@ -251,7 +232,11 @@ const Forum: React.FC = () => {
                 )
               }
               title={<Typography sx={{ color: "#fff" }}>{post.user?.username}</Typography>}
-              subheader={<Typography sx={{ color: "#bbb" }}>{new Date(post.createdAt).toLocaleString()}</Typography>}
+              subheader={
+                <Typography sx={{ color: "#bbb" }}>{
+                  new Date(post.createdAt).toLocaleString()
+                }</Typography>
+              }
             />
             <CardContent>
               {editingPost === post._id ? (
@@ -269,24 +254,58 @@ const Forum: React.FC = () => {
                     <input type="file" hidden onChange={handleEditedImageChange} />
                   </IconButton>
                   {editedPreviewImage && (
-                    <CardMedia
-                      component="img"
-                      image={editedPreviewImage}
-                      sx={{ mt: 2, maxHeight: 250 }}
-                    />
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: "360px",
+                        backgroundColor: "#000",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        mt: 2,
+                      }}
+                    >
+                      <img
+                        src={editedPreviewImage}
+                        alt="Edited Preview"
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                      />
+                    </Box>
                   )}
                 </>
               ) : (
                 <Typography sx={{ color: "#eee" }}>{post.text}</Typography>
               )}
             </CardContent>
+
             {post.image && !editingPost && (
-              <CardMedia
-                component="img"
-                image={`https://node17.cs.colman.ac.il${post.image}`}
-                sx={{ maxHeight: 300 }}
-              />
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "360px",
+                  backgroundColor: "#000",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                  mt: 2,
+                }}
+              >
+                <img
+                  src={`http://localhost:4000${post.image}`}
+                  alt="Post"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "https://via.placeholder.com/300x450?text=No+Image";
+                  }}
+                  style={{ width: "auto", height: "100%", objectFit: "contain" }}
+                />
+              </Box>
             )}
+
             <CardActions>
               <IconButton onClick={() => handleLikePost(post._id)} sx={{ color: "#F44336" }}>
                 <Favorite />
