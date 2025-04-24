@@ -6,6 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
+<<<<<<< HEAD:src/components/App.tsx
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
@@ -22,6 +23,17 @@ const storedUser = localStorage.getItem("user");
 const currentUser = storedUser ? JSON.parse(storedUser) : null;
 console.log("token:", localStorage.getItem("token"));
 console.log("user:", localStorage.getItem("user"));
+=======
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import Forum from "./pages/Forum";
+import AIRecommendation from "./pages/AIRecommendation";
+import Comments from "./pages/Comments";
+import Navbar from "./components/NavBar";
+import About from "./pages/About";
+>>>>>>> aee234f (improved photos display and AI chat functionality):src/App.tsx
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem("token");
