@@ -26,7 +26,6 @@ import {
 } from "@mui/icons-material";
 import { socketService } from "../services/socket-service";
 import { Message } from "../models/messageModel";
-import { Chat } from "../models/chatModel";
 
 const Forum: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -153,17 +152,6 @@ const Forum: React.FC = () => {
   const handleMessage = (msg: Message) => {
     console.log(msg);
   };
-
-  const handleChat = (chat: Chat) => {
-    console.log(chat);
-  };
-  
-  useEffect(() => {
-    socketService.connect(handleMessage, handleChat);
-    return () => {
-      socketService.disconnect();
-    };
-  }, []);
 
   return (
     <Box
